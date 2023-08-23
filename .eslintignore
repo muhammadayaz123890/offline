@@ -1,0 +1,7 @@
+node_modules
+build
+public
+src/serviceWorker.js
+src/config/dataService/*.js
+src/container/project/Project.js
+src/components/TemplateForm/*

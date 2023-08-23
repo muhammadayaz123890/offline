@@ -1,0 +1,12 @@
+
+   .ant-modal-body {
+    height: 100%;
+   } 
+
+   .ant-modal{
+    height: 95%;
+   }
+   .ant-modal-content{
+    height: 100%;
+    max-height: max-content;
+   }

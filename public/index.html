@@ -1,0 +1,155 @@
+<!doctype html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jvectormap/2.0.4/jquery-jvectormap.css"
+      type="text/css"
+      media="screen"
+    />
+
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>TaskingMe</title>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+
+    
+    <script>
+      if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then((registration) => {
+        console.log('Service Worker registered with scope:', registration.scope);
+      })
+      .catch((error) => {
+        console.error('Service Worker registration failed:', error);
+      });
+  }
+    </script>
+
+<script>
+
+  // Intercept the fetch event and execute the code when it occurs
+
+  const TaskApiData = '';
+  const UserApiData ='';
+  const CustomerData = '';
+  const QuestionaireData = '';
+  
+const openDBRequest = indexedDB.open('myDatabase', 1);
+openDBRequest.onerror = function(event) {
+  console.error('Error opening IndexedDB database:', event.target.error);
+};
+openDBRequest.onupgradeneeded = function(event) {
+  const db = event.target.result;
+
+  const TaskobjectStore = db.createObjectStore('Task', { keyPath: 'id', autoIncrement: true });
+  const UserobjectStore = db.createObjectStore('User', { keyPath: 'id', autoIncrement: true });
+  const CustomerobjectStore = db.createObjectStore('Customer', { keyPath: 'id', autoIncrement: true });
+  const QuestionaireObjectStore = db.createObjectStore('Questionaire', { keyPath: 'id', autoIncrement: true });
+
+  TaskobjectStore.createIndex('field1', 'field1', { unique: false });
+  TaskobjectStore.createIndex('field2', 'field2', { unique: false });
+  TaskobjectStore.createIndex('customer', 'customer', { unique: false });
+  TaskobjectStore.createIndex('team', 'team', { unique: false });
+
+  UserobjectStore.createIndex('field1', 'field1', { unique: false });
+  UserobjectStore.createIndex('field2', 'field2', { unique: false });
+  UserobjectStore.createIndex('customer', 'customer', { unique: false });
+  UserobjectStore.createIndex('team', 'team', { unique: false });
+
+  CustomerobjectStore.createIndex('field1', 'field1', { unique: false });
+  CustomerobjectStore.createIndex('field2', 'field2', { unique: false });
+  CustomerobjectStore.createIndex('customer', 'customer', { unique: false });
+  CustomerobjectStore.createIndex('team', 'team', { unique: false });
+
+  QuestionaireObjectStore.createIndex('field1', 'field1', { unique: false });
+  QuestionaireObjectStore.createIndex('field2', 'field2', { unique: false });
+  QuestionaireObjectStore.createIndex('customer', 'customer', { unique: false });
+  QuestionaireObjectStore.createIndex('team', 'team', { unique: false });
+};
+  // Assuming you have fetched the data from the API and stored it in apiData
+
+  // Open IndexedDB and handle success event
+  openDBRequest.onsuccess = function(event) {
+    const db = event.target.result;
+
+    function clearAndStoreTasks(apiData) {
+      const transaction = db.transaction('Tasks', 'readwrite');
+      const objectStore = transaction.objectStore('Tasks');
+
+      // Clear the existing data from the object store before storing new data
+      objectStore.clear().onsuccess = function() {
+        console.log('Cleared existing data from Tasks object store');
+
+        // Store the new tasks in the object store
+        apiData.forEach(task => {
+          // Assuming task has fields like id, title, description, dueDate, etc.
+          const taskData = {
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            dueDate: task.dueDate,
+            // Add other fields as needed
+          };
+
+          const addRequest = objectStore.add(taskData);
+
+          addRequest.onsuccess = function() {
+            console.log('Task stored in IndexedDB');
+          };
+
+          addRequest.onerror = function(event) {
+            console.error('Error storing task:', event.target.error);
+          };
+        });
+      };
+    }
+
+    // Call the function to clear existing data and store tasks from API data
+    clearAndStoreTasks(apiData);
+  };
+
+
+    </script>
+
+  </body>
+</html>
